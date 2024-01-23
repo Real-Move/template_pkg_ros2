@@ -62,7 +62,7 @@ def replace_string(directory, old_string, new_string):
         # Replace occurrences in file contents
         for filename in files:
             filepath = os.path.join(root, filename)
-            print(filepath)
+            
             with open(filepath, 'r') as file:
                 file_content = file.read()
                 file_content = file_content.replace(old_string, new_string)
