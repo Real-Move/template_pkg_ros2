@@ -1,6 +1,6 @@
-# template_pkg_ros2
+# ros2_template_pkg
 
-Run the following script inside your repo. This way all the occurences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
+Run the following script inside your repo. This way all the occurences of the `ros2_template_pkg` string will be substituted by the name of your actual package.
 
 ``` bash
 ./change_name.py
@@ -9,7 +9,7 @@ Run the following script inside your repo. This way all the occurences of the `t
 Now you can build it running the following command:
 
 ```bash
-colcon build --packages-select template_pkg_ros2 --symlink-install
+colcon build --packages-select ros2_template_pkg --symlink-install
 source install/setup.bash
 ```
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(template_pkg_ros2)
+project(ros2_template_pkg)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -20,12 +20,12 @@ find_package(rclpy REQUIRED)
 include_directories(include)
 
 # Create Cpp executable
-add_executable(cpp_executable src/cpp_node.cpp)
-ament_target_dependencies(cpp_executable rclcpp)
+add_executable(ros2_template_node src/ros2_template_node.cpp)
+ament_target_dependencies(ros2_template_node)
 
 # Install Cpp executables
 install(TARGETS
-  cpp_executable
+ros2_template_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

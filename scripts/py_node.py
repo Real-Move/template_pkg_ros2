@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from template_pkg_ros2 import module_to_import
+from ros2_template_pkg import module_to_import
 
 def main():
     print('Hi from my_package_py.')
