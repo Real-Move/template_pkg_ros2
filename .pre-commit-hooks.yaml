@@ -1,4 +1,0 @@
-# .pre-commit-hooks.yaml
-id: check-launch-file-names
-  name: Check ROS 2 launch file names
-  entry: ./pre-commit/check_launch_file_names.py
