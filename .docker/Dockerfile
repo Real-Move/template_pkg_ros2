@@ -33,12 +33,12 @@ RUN apt-get update && \
 	rm -rf /var/lib/apt/lists/* && \
 	apt-get clean
 
-RUN mkdir -p /ros/ros2_ws 
+RUN mkdir -p /ros/ros2_ws
 
 COPY .docker/ros_entrypoint.sh /
 
 RUN echo 'alias cd_ws="cd /ros/ros2_ws"' >> ~/.bashrc
 
-WORKDIR /ros/ros2_ws 
+WORKDIR /ros/ros2_ws
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
