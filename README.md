@@ -14,3 +14,9 @@ source install/setup.bash
 ```
 
 Have fun developing your ROS 2 Package.
+
+```
+pip install pre-commit
+pre-commit install --install-hooks
+pre-commit run --all-files
+```
