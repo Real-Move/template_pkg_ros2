@@ -18,27 +18,36 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef ROS2_TEMPLATE_PKG__ROS2_TEMPLATE_NODE_HPP_
-#define ROS2_TEMPLATE_PKG__ROS2_TEMPLATE_NODE_HPP_
+#include "ros2_template_pkg/ros2_template_node.hpp"
 
-#include <iostream>
-#include <string>
-
-//!  A template class for a ros2 node
-/*!
-  This is a template for ros2 nodes. Not to be mistaken for c++ template
-*/
-class RosTemplateNode
+RosTemplateNode::RosTemplateNode()
 {
-public:
+}
 
-  RosTemplateNode();
+RosTemplateNode::~RosTemplateNode()
+{
+}
 
-  ~RosTemplateNode();
+void RosTemplateNode::print(std::string message)
+{
+  std::cout << message;
+}
 
-  void print(std::string message);
 
-  bool addTwoInts(int a, int b, int & sum);
-};
+bool RosTemplateNode::addTwoInts(int a, int b, int & sum)
+{
+  sum = a + b;
 
-#endif  // ROS2_TEMPLATE_PKG__ROS2_TEMPLATE_NODE_HPP_
+  return true;
+}
+
+int main(int argc, char ** argv)
+{
+  (void) argc;
+  (void) argv;
+
+  RosTemplateNode rosNode;
+  rosNode.print("This is a ros2_template_pkg package node\n");
+
+  return 0;
+}
