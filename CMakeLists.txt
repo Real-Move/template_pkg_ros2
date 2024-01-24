@@ -20,21 +20,35 @@ find_package(rclpy REQUIRED)
 include_directories(include)
 
 # Create Cpp executable
-add_executable(ros2_template_node src/ros2_template_node.cpp)
-ament_target_dependencies(ros2_template_node)
+add_executable(ros2_template_node_cpp src/ros2_template_node_cpp.cpp)
+ament_target_dependencies(ros2_template_node_cpp rclcpp)
 
-# Install Cpp executables
-install(TARGETS
-ros2_template_node
-  DESTINATION lib/${PROJECT_NAME}
-)
+add_executable(hello_world_node src/hello_world_node.cpp)
+ament_target_dependencies(hello_world_node rclcpp)
 
 # Install Python modules
 ament_python_install_package(${PROJECT_NAME})
 
+message(STATUS "BUILD_TESTING: ${BUILD_TESTING}")
+
+if(BUILD_TESTING)
+
+  find_package(ament_cmake_gtest REQUIRED)
+  add_subdirectory(test)
+
+endif()
+
 # Install Python executables
 install(PROGRAMS
-  scripts/py_node.py
+  scripts/ros2_template_node_python.py
+  scripts/hello_world_node.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install Cpp executables
+install(TARGETS
+ros2_template_node_cpp
+hello_world_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
