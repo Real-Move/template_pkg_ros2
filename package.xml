@@ -3,7 +3,7 @@
 <package format="3">
   <name>ros2_template_pkg</name>
   <version>0.0.0</version>
-  <description>A ROS 2 package template providing a starting point for your ROS 2 nodes and applications. 
+  <description>A ROS 2 package template providing a starting point for your ROS 2 nodes and applications.
     Customize this package to suit your specific robotics project needs.</description>
   <maintainer email="luca.fortini@iit.it">Luca Fortini</maintainer>
   <license>MIT</license>
@@ -14,8 +14,9 @@
   <depend>rclcpp</depend>
   <depend>rclpy</depend>
 
-  <test_depend>ament_lint_auto</test_depend>
-  <test_depend>ament_lint_common</test_depend>
+  <!-- <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend> -->
+  <test_depend>ament_cmake_gtest</test_depend>
 
   <exec_depend>ros2launch</exec_depend>
 
