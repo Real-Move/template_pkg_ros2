@@ -9,7 +9,7 @@ repos:
 -   repo: local
     hooks:
     -   id: check-launch-file-names
-        name: Check ROS 2 launch file names
+        name: check launch file name format
         entry: .pre-commit/check_launch_file_names.py
         language: python
         types: [file]
