@@ -5,7 +5,16 @@ repos:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: mixed-line-ending
-
+-   repo: https://github.com/hadialqattan/pycln
+    rev: v2.1.1
+    hooks:
+    -   id: pycln
+        args: [--all]
+-   repo: https://github.com/pycqa/isort
+    rev: 5.11.5
+    hooks:
+    -   id: isort
+        args: [ "--profile", "black" ]
 -   repo: local
     hooks:
     -   id: check-launch-file-names
@@ -13,3 +22,18 @@ repos:
         entry: .pre-commit/check_launch_file_names.py
         language: python
         types: [file]
+-   repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.1.12
+    hooks:
+    -   id: insert-license
+        name: "Insert license header in C++ source files"
+        args: [--license-filepath=LICENSE,
+               '--comment-style=/*| *| */',
+               --detect-license-in-X-top-lines=16]
+        types_or: [c, c++, objective-c]
+    -   id: insert-license
+        name: "Insert license header in Python source files"
+        args: [--license-filepath=LICENSE,
+               '--comment-style=#',
+               --detect-license-in-X-top-lines=16]
+        types_or: [python]

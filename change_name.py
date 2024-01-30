@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import sys
 import subprocess
 
 TEMPLATE_NAME = "ros2_template_pkg"
