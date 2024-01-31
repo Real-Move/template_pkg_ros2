@@ -4,7 +4,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-pre-commit run -q
+pre-commit run > /dev/null
 
 # Check if pre-commit modified any files
 modified_files=$(git diff --name-only --cached)
