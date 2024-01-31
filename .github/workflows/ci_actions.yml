@@ -1,0 +1,13 @@
+name: Test Template
+
+on:
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-20.04
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+            - name: Print Hello World
+              run: echo "Hello, World!"

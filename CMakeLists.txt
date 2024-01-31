@@ -34,6 +34,8 @@ message(STATUS "BUILD_TESTING: ${BUILD_TESTING}")
 if(BUILD_TESTING)
 
   find_package(ament_cmake_gtest REQUIRED)
+  find_package(ament_cmake_pytest REQUIRED)
+
   add_subdirectory(test)
 
 endif()

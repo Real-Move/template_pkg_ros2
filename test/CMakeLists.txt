@@ -1,1 +1,3 @@
-ament_add_gtest(${PROJECT_NAME} test_ros2_template_node.cpp)
+ament_add_gtest(test_ros2_template_node test_ros2_template_node.cpp)
+
+ament_add_pytest_test(test_hello_world test_hello_world.py)
