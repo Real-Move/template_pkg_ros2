@@ -16,3 +16,5 @@ fi
 
 commit_message="$1"
 git commit -m "$commit_message"
+
+pre-commit run
