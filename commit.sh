@@ -14,7 +14,7 @@ if [ -n "$modified_files" ]; then
     git add $modified_files
 fi
 
+pre-commit run
+
 commit_message="$1"
 git commit -m "$commit_message"
-
-pre-commit run
