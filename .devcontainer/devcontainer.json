@@ -1,6 +1,6 @@
 // .devcontainer/devcontainer.json
 {
-    "name": "Luca",
+    "name": "ROS Foxy",
     "build": {
       "dockerfile": "Dockerfile",
       "context": "."

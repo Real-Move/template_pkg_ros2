@@ -22,10 +22,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 def main():
     print('Hi from my_package_py.')
-
 
 if __name__ == '__main__':
     main()

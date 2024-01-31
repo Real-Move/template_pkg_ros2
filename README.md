@@ -35,6 +35,14 @@ ros2 launch ros2_template.launch.py
 ```bash
 colcon test --packages-select ros2_template_pkg --ctest-args tests
 colcon test-result --all --verbose
+
+```
+
+alternatively to run the pytests the following output is cleaner.
+
+
+```
+python3 -m pytest -v
 ```
 
 ## Pre-Commit
@@ -50,5 +58,7 @@ pre-commit install --install-hooks
 pre-commit run --all-files
 ```
 
+## VS-Code Devcontainer
+I added a devcontainer minimal structure to activate Python and ROS linting in VS code.
 
 Have fun developing your ROS 2 Package!
