@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Check if a commit message is provided
 if [ -z "$1" ]; then
     echo "Please provide a commit message."
