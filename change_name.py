@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import subprocess
@@ -77,3 +77,5 @@ if __name__ == "__main__":
 
     # delete the file once finished
     os.remove(os.path.join(base_directory, 'change_name.py'))
+
+    print("changed name succesfully")
