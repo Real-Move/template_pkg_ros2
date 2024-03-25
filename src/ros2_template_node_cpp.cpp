@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "ros2_template_pkg/ros2_template_node.hpp"
+#include "template_pkg_ros2/ros2_template_node.hpp"
 
 RosTemplateNode::RosTemplateNode()
 {
@@ -51,7 +51,7 @@ int main(int argc, char ** argv)
   (void) argv;
 
   RosTemplateNode rosNode;
-  rosNode.print("This is a ros2_template_pkg package node\n");
+  rosNode.print("This is a template_pkg_ros2 package node\n");
 
   return 0;
 }

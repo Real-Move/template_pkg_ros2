@@ -3,7 +3,7 @@
 import os
 import subprocess
 
-TEMPLATE_NAME = "ros2_template_pkg"
+TEMPLATE_NAME = "template_pkg_ros2"
 
 def get_git_repo_name(directory):
     """

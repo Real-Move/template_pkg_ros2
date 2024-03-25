@@ -1,6 +1,6 @@
-# ros2_template_pkg
+# template_pkg_ros2
 
-Run the following script inside your repo. This way all the occurences of the `ros2_template_pkg` string will be substituted by the name of your actual package.
+Run the following script inside your repo. This way all the occurences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
 
 ``` bash
 ./change_name.py
@@ -22,7 +22,7 @@ docker run -it --rm --privileged --name <container_name> --mount type=bind,sourc
 Now you can build the ROS 2 package running the following command:
 
 ```bash
-colcon build --packages-select ros2_template_pkg --symlink-install
+colcon build --packages-select template_pkg_ros2 --symlink-install
 source install/setup.bash
 ```
 
@@ -33,7 +33,7 @@ ros2 launch ros2_template.launch.py
 
 ## Run the tests
 ```bash
-colcon test --packages-select ros2_template_pkg --ctest-args tests
+colcon test --packages-select template_pkg_ros2 --ctest-args tests
 colcon test-result --all --verbose
 
 ```

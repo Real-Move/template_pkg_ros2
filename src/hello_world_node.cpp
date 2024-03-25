@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-#include "ros2_template_pkg/ros2_template_node.hpp"
+#include "template_pkg_ros2/ros2_template_node.hpp"
 
 // Include the ros2 c++ APIs
 #include "rclcpp/rclcpp.hpp"

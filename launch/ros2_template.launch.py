@@ -34,11 +34,11 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Add a log message to indicate the start of the launch
-    ld.add_action(launch.actions.LogInfo(msg='Hello Welcome to the ros2_template_pkg!'))
+    ld.add_action(launch.actions.LogInfo(msg='Hello Welcome to the template_pkg_ros2!'))
 
     # Define a C++ node configuration
     cpp_node = Node(
-        package='ros2_template_pkg',
+        package='template_pkg_ros2',
         executable='ros2_template_node_cpp',
         name='ros2_template_node_cpp',
         exec_name='ros2_template_node_cpp',
@@ -47,7 +47,7 @@ def generate_launch_description():
 
     # Define a Python node configuration
     py_node = Node(
-        package='ros2_template_pkg',
+        package='template_pkg_ros2',
         executable='ros2_template_node_python.py',
         name='ros2_template_node_python',
         exec_name='ros2_template_node_python',
@@ -56,7 +56,7 @@ def generate_launch_description():
 
     include = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([
-                FindPackageShare("ros2_template_pkg"), '/launch', '/include_launch.py']))
+                FindPackageShare("template_pkg_ros2"), '/launch', '/include_launch.py']))
 
     # Add the C++ and Python nodes to the LaunchDescription
     ld.add_action(cpp_node)
