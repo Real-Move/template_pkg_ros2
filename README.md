@@ -28,7 +28,7 @@ source install/setup.bash
 
 ## Run the example
 ```bash
-ros2 launch ros2_template.launch.py
+ros2 launch template_pkg_ros2 ros2_template.launch.py
 ```
 
 ## Run the tests
