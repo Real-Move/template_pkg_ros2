@@ -51,7 +51,7 @@ int main(int argc, char ** argv)
   (void) argv;
 
   RosTemplateNode rosNode;
-  rosNode.print("This is a template_pkg_ros2 package node\n");
+  rosNode.print("Hello from template_pkg_ros2 cpp node.");
 
   return 0;
 }

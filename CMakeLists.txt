@@ -23,6 +23,9 @@ include_directories(include)
 add_executable(ros2_template_node_cpp src/ros2_template_node_cpp.cpp)
 ament_target_dependencies(ros2_template_node_cpp rclcpp)
 
+add_executable(logging_demo_node src/logging_demo.cpp)
+ament_target_dependencies(logging_demo_node rclcpp)
+
 add_executable(hello_world_node src/hello_world_node.cpp)
 ament_target_dependencies(hello_world_node rclcpp)
 
@@ -51,6 +54,7 @@ install(PROGRAMS
 install(TARGETS
 ros2_template_node_cpp
 hello_world_node
+logging_demo_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

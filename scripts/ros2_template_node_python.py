@@ -23,7 +23,7 @@
 # SOFTWARE.
 
 def main():
-    print('Hi from my_package_py.')
+    print('Hello from template_pkg_ros2 python node.')
 
 if __name__ == '__main__':
     main()
