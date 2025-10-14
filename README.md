@@ -1,10 +1,15 @@
 # template_pkg_ros2
 
-Run the following script inside your repo. This way all the occurences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
+A minimal ROS 2 package template with Docker, VS Code Devcontainer, pre-commit hooks, unit tests, and a ready-to-run launch file.
+
+After creating your repo from this template, rename the package using the script below. This way all the occurences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
 
 ``` bash
 ./change_name.py
 ```
+
+> [!IMPORTANT]
+> This probably works only if you create a repo from this template using github web interface.
 
 ## Docker
 
