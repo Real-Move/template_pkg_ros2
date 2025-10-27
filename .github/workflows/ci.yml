@@ -28,3 +28,4 @@ jobs:
           skip-tests: false  
           skip-rosdep-install: false
           rosdep-check: false
+          coverage-result: false
