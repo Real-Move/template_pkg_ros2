@@ -1,4 +1,4 @@
-ARG ROS_DISTRO=foxy
+ARG ROS_DISTRO=humble
 
 FROM ros:${ROS_DISTRO}
 
@@ -33,11 +33,4 @@ RUN apt-get update && \
 	rm -rf /var/lib/apt/lists/* && \
 	apt-get clean
 
-WORKDIR /root/ros_ws
-
-COPY .docker/ros_entrypoint.sh /
-
-RUN echo 'alias cd_ws="cd /root/ros_ws"' >> ~/.bashrc
-
-ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]

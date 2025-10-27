@@ -1,0 +1,22 @@
+name: Test Build
+
+on:
+  push: { branches: [ main ] }
+  pull_request: { branches: [ main ] }
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    container:
+      image: osrf/ros:humble-desktop-full
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ros-tooling/action-ros-ci@v0.4
+        with:
+          target-ros2-distro: humble
+          import-token: ${{ secrets.REPO_ORG_PAT }}
+          skip-tests: true  
+          skip-rosdep-install: false
+          rosdep-check: false
