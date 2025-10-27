@@ -1,8 +1,16 @@
 name: Test Build
 
 on:
-  push: { branches: [ main ] }
-  pull_request: { branches: [ main ] }
+  push: 
+    branches: [ main ] 
+    paths-ignore:
+      - 'README.md'
+      - '**/*.md'
+  pull_request: 
+    branches: [ main ] 
+    paths-ignore:
+      - 'README.md'
+      - '**/*.md'
   workflow_dispatch:
 
 jobs:
@@ -17,6 +25,6 @@ jobs:
         with:
           target-ros2-distro: humble
           import-token: ${{ secrets.REPO_ORG_PAT }}
-          skip-tests: true  
+          skip-tests: false  
           skip-rosdep-install: false
           rosdep-check: false
