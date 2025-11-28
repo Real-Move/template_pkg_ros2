@@ -1,81 +1,132 @@
 #!/usr/bin/env python3
 
 import os
+import re
 import subprocess
 
 TEMPLATE_NAME = "template_pkg_ros2"
+GITHUB_ORG = "Real-Move"   # change if you use a different org/user
 
 def get_git_repo_name(directory):
     """
     Get the name of the Git repository in the specified directory.
-
-    Args:
-        directory (str): The directory path to check for a Git repository.
-
-    Returns:
-        str: The name of the Git repository if found, or None if the directory is not a Git repository.
-
-    Raises:
-        subprocess.CalledProcessError: If the 'git rev-parse --show-toplevel' command fails.
     """
     try:
-        # Run 'git rev-parse --show-toplevel' to get the top-level directory of the Git repository
-        git_top_level = subprocess.check_output(['git', 'rev-parse', '--show-toplevel'], cwd=directory, text=True).strip()
-
-        # Extract the last component of the path, which is the repository name
-        repo_name = os.path.basename(git_top_level)
-        return repo_name
+        git_top_level = subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"],
+            cwd=directory,
+            text=True
+        ).strip()
+        return os.path.basename(git_top_level)
     except subprocess.CalledProcessError:
-        # Handle the case where the directory is not a Git repository
         return None
 
 def replace_string(directory, old_string, new_string):
     """
-    Recursively replaces occurrences of a string in file names, folder names, and file contents within a directory.
+    Recursively replaces occurrences of a string in file names, folder names,
+    and file contents within a directory.
 
-    Args:
-        directory (str): The root directory where the replacement will take place.
-        old_string (str): The string to be replaced.
-        new_string (str): The string to replace occurrences of the old string.
-
-    Returns:
-        None
+    Skips .git.
     """
     for root, dirs, files in os.walk(directory, topdown=True):
+        if ".git" in dirs:
+            dirs.remove(".git")
 
-        if '.git' in dirs:
-            dirs.remove('.git')
-
-        # Replace occurrences in file names
+        # Rename files
         for filename in files:
-            new_filename = filename.replace(old_string, new_string)
-            os.rename(os.path.join(root, filename), os.path.join(root, new_filename))
+            if old_string in filename:
+                old_path = os.path.join(root, filename)
+                new_filename = filename.replace(old_string, new_string)
+                new_path = os.path.join(root, new_filename)
+                if old_path != new_path:
+                    os.rename(old_path, new_path)
 
-        # Replace occurrences in folder names
-        for folder_name in dirs:
+        # Rename folders
+        for i, folder_name in enumerate(dirs):
+            if old_string in folder_name:
+                old_path = os.path.join(root, folder_name)
+                new_folder_name = folder_name.replace(old_string, new_string)
+                new_path = os.path.join(root, new_folder_name)
+                if old_path != new_path:
+                    os.rename(old_path, new_path)
+                    dirs[i] = new_folder_name  # keep os.walk in sync
 
-            new_folder_name = folder_name.replace(old_string, new_string)
-
-            os.rename(os.path.join(root, folder_name), os.path.join(root, new_folder_name))
-
-        # Replace occurrences in file contents
+        # Replace contents
         for filename in files:
             filepath = os.path.join(root, filename)
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    content = f.read()
+                new_content = content.replace(old_string, new_string)
+                if new_content != content:
+                    with open(filepath, "w", encoding="utf-8") as f:
+                        f.write(new_content)
+            except UnicodeDecodeError:
+                continue  # skip binary/non-utf8 files
 
-            with open(filepath, 'r') as file:
-                file_content = file.read()
-                file_content = file_content.replace(old_string, new_string)
-            with open(filepath, 'w') as file:
-                file.write(file_content)
+def update_readme(repo_root, template_name, repo_name, github_org=GITHUB_ORG):
+    """
+    README.md is at repo root.
+    Keep only:
+      - title
+      - first GitHub Actions badge line (with updated repo path)
+    """
+    readme_path = os.path.join(repo_root, "README.md")
+    if not os.path.exists(readme_path):
+        return
+
+    with open(readme_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    # First H1 title
+    title_line = None
+    for line in lines:
+        if line.strip().startswith("# "):
+            title_line = line.strip()
+            break
+
+    # First GitHub Actions badge line
+    badge_line = None
+    badge_regex = re.compile(
+        r"\[!\[.*?\]\(https://github\.com/.+?/actions/workflows/.+?/badge\.svg\)\]\(https://github\.com/.+?/actions/workflows/.+?\)"
+    )
+    for line in lines:
+        if badge_regex.search(line.strip()):
+            badge_line = line.strip()
+            break
+
+    # Fallbacks
+    if title_line is None:
+        title_line = f"# {repo_name}"
+    else:
+        title_line = title_line.replace(template_name, repo_name)
+
+    if badge_line is None:
+        badge_line = (
+            f"[![Test Build](https://github.com/{github_org}/{repo_name}/actions/workflows/ci.yml/badge.svg)]"
+            f"(https://github.com/{github_org}/{repo_name}/actions/workflows/ci.yml)"
+        )
+    else:
+        badge_line = badge_line.replace(template_name, repo_name)
+
+    new_readme = title_line + "\n\n" + badge_line + "\n"
+
+    with open(readme_path, "w", encoding="utf-8") as f:
+        f.write(new_readme)
 
 if __name__ == "__main__":
+    repo_root = os.path.dirname(os.path.realpath(__file__))
+    repo_name = get_git_repo_name(repo_root)
 
-    base_directory = os.path.dirname(os.path.realpath(__file__))
-    repo_name = get_git_repo_name(base_directory)
+    if repo_name is None:
+        raise RuntimeError("Not inside a git repository; cannot determine repo name.")
 
-    replace_string(base_directory, TEMPLATE_NAME, repo_name)
+    replace_string(repo_root, TEMPLATE_NAME, repo_name)
 
-    # delete the file once finished
-    os.remove(os.path.join(base_directory, 'change_name.py'))
+    # Rewrite README at repo root
+    update_readme(repo_root, TEMPLATE_NAME, repo_name)
 
-    print("changed name succesfully")
+    # delete the script once finished
+    os.remove(os.path.join(repo_root, "change_name.py"))
+
+    print("changed name successfully")
