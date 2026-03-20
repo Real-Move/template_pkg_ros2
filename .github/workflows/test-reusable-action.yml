@@ -1,0 +1,8 @@
+name: Use shared test
+
+on:
+  push:
+
+jobs:
+  test:
+    uses: Real-Move/realmove-actions/.github/workflows/hello.yml@main
