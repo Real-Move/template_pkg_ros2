@@ -1,13 +1,13 @@
 name: Test ROS Build
 
 on:
-  push: 
-    branches: [ main ] 
+  push:
+    branches: [ main ]
     paths-ignore:
       - 'README.md'
       - '**/*.md'
-  pull_request: 
-    branches: [ main ] 
+  pull_request:
+    branches: [ main ]
     paths-ignore:
       - 'README.md'
       - '**/*.md'
