@@ -1,0 +1,26 @@
+name: Test ROS Build
+
+on:
+  push: 
+    branches: [ main ] 
+    paths-ignore:
+      - 'README.md'
+      - '**/*.md'
+  pull_request: 
+    branches: [ main ] 
+    paths-ignore:
+      - 'README.md'
+      - '**/*.md'
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: Real-Move/realmove-actions/.github/workflows/ros-ci.yml@main
+    with:
+      ros_distro: humble
+      workspace_mode: deps
+      skip_tests: false
+      skip_rosdep_install: false
+      rosdep_check: false
+    secrets:
+      REPO_ORG_PAT: ${{ secrets.REPO_ORG_PAT }}
