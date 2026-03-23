@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     name: ROS CI Test Build
-    uses: Real-Move/realmove-actions/.github/workflows/ros-ci.yml@main
+    uses: Real-Move/realmove-actions/.github/workflows/reusable-ros-ci.yml@main
     with:
       ros_distro: humble
       workspace_mode: deps
