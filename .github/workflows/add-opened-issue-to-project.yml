@@ -1,4 +1,4 @@
-name: Add to Main Project when issue opened
+name: Add Opened Issue to Main Project
 
 on:
   issues:

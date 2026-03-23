@@ -1,4 +1,4 @@
-name: Notify Issue Author If No Labels
+name: Notify Issue Author if No Labels
 on:
   issues:
     types: [opened, edited, unlabeled]
