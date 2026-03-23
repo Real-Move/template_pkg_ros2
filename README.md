@@ -1,6 +1,6 @@
 # template_pkg_ros2
 
-[![Test Build](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ci.yml/badge.svg)](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ci.yml)
+[![ROS CI Test Build](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci.yml/badge.svg)](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci.yml)
 
 A minimal ROS 2 package template with Docker, VS Code Devcontainer, pre-commit hooks, unit tests, and a ready-to-run launch file.
 
