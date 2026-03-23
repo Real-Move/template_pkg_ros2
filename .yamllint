@@ -1,0 +1,19 @@
+---
+extends: default
+
+rules:
+  line-length:
+    max: 100
+  truthy:
+    ignore: |
+      .github/workflows/*.yml
+      .github/workflows/*.yaml
+  document-start:
+    ignore: |
+      .github/workflows/*.yml
+      .github/workflows/*.yaml
+      .clang-format
+      .pre-commit-config.yaml
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 0
