@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# Copyright (c) 2024 Real-Move. All rights reserved.
+# Proprietary and confidential.
+# See LICENSE for full terms.
+
 # Check if a commit message is provided
 if [ -z "$1" ]; then
     echo "Please provide a commit message."

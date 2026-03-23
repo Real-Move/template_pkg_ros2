@@ -1,3 +1,7 @@
+# Copyright (c) 2024 Real-Move. All rights reserved.
+# Proprietary and confidential.
+# See LICENSE for full terms.
+
 # MIT License
 #
 # Copyright (c) 2024 Real-Move
@@ -48,6 +52,6 @@ import launch
 def generate_launch_description():
 
     ld = launch.LaunchDescription()
-    ld.add_action(launch.actions.LogInfo(msg='Hi from Include!'))
+    ld.add_action(launch.actions.LogInfo(msg="Hi from Include!"))
 
     return ld

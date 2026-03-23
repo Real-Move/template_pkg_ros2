@@ -1,21 +1,14 @@
-MIT License
+Copyright (c) 2024 Real-Move. All rights reserved.
 
-Copyright (c) 2024 Real-Move
+PROPRIETARY AND CONFIDENTIAL
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This software and all related files (including but not limited to source code, binaries, URDF models, and launch configurations) are the sole property of Real-Move.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Grant of License: Real-Move grants the user a non-exclusive, non-transferable license to use the software solely in its compiled/binary form.
+2. Restrictions: The user shall not:
+    - Decompile, disassemble, or reverse-engineer the software or its models.
+    - Modify, adapt, or create derivative works based on the software.
+    - Redistribute or sell the software to any third party.
+3. Ownership: No title to or ownership of the software or its intellectual property is transferred to the user.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.

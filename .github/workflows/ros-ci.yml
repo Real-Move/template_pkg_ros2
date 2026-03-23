@@ -1,4 +1,4 @@
-name: Test ROS Build
+name: ROS CI Test Build
 
 on:
   push:
@@ -15,6 +15,7 @@ on:
 
 jobs:
   build:
+    name: ROS CI Test Build
     uses: Real-Move/realmove-actions/.github/workflows/ros-ci.yml@main
     with:
       ros_distro: humble

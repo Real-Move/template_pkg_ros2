@@ -1,4 +1,10 @@
 /*
+ * Copyright (c) 2024 Real-Move. All rights reserved.
+ * Proprietary and confidential.
+ * See LICENSE for full terms.
+ */
+
+/*
  * MIT License
  *
  * Copyright (c) 2024 Real-Move
@@ -34,15 +40,14 @@
 */
 class RosTemplateNode
 {
-public:
+  public:
+    RosTemplateNode();
 
-  RosTemplateNode();
+    ~RosTemplateNode();
 
-  ~RosTemplateNode();
+    void print(std::string message);
 
-  void print(std::string message);
-
-  bool addTwoInts(int a, int b, int & sum);
+    bool addTwoInts(int a, int b, int &sum);
 };
 
-#endif  // TEMPLATE_PKG_ROS2__ROS2_TEMPLATE_NODE_HPP_
+#endif // TEMPLATE_PKG_ROS2__ROS2_TEMPLATE_NODE_HPP_

@@ -1,3 +1,7 @@
+# Copyright (c) 2024 Real-Move. All rights reserved.
+# Proprietary and confidential.
+# See LICENSE for full terms.
+
 # MIT License
 #
 # Copyright (c) 2024 Real-Move

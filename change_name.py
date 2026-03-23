@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 
+# Copyright (c) 2024 Real-Move. All rights reserved.
+# Proprietary and confidential.
+# See LICENSE for full terms.
+
 import os
 import re
 import subprocess
 
 TEMPLATE_NAME = "template_pkg_ros2"
-GITHUB_ORG = "Real-Move"   # change if you use a different org/user
+GITHUB_ORG = "Real-Move"  # change if you use a different org/user
+
 
 def get_git_repo_name(directory):
     """
@@ -13,13 +18,12 @@ def get_git_repo_name(directory):
     """
     try:
         git_top_level = subprocess.check_output(
-            ["git", "rev-parse", "--show-toplevel"],
-            cwd=directory,
-            text=True
+            ["git", "rev-parse", "--show-toplevel"], cwd=directory, text=True
         ).strip()
         return os.path.basename(git_top_level)
     except subprocess.CalledProcessError:
         return None
+
 
 def replace_string(directory, old_string, new_string):
     """
@@ -63,6 +67,7 @@ def replace_string(directory, old_string, new_string):
                         f.write(new_content)
             except UnicodeDecodeError:
                 continue  # skip binary/non-utf8 files
+
 
 def update_readme(repo_root, template_name, repo_name, github_org=GITHUB_ORG):
     """
@@ -113,6 +118,7 @@ def update_readme(repo_root, template_name, repo_name, github_org=GITHUB_ORG):
 
     with open(readme_path, "w", encoding="utf-8") as f:
         f.write(new_readme)
+
 
 if __name__ == "__main__":
     repo_root = os.path.dirname(os.path.realpath(__file__))
