@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     // Create a ros2 node, which owns one or more ros2 interfaces
     auto node = std::make_shared<rclcpp::Node>("hello_world_node");
     // Broadcast a simple log message
-    RCLCPP_INFO(node->get_logger(), "Hello, world!");
+    RCLCPP_INFO(node->get_logger(), "Hello, world from cpp node!");
     // Process ros2 callbacks until receiving a SIGINT (ctrl-c)
     rclcpp::spin(node);
     // Stop the node's resources
