@@ -4,3 +4,15 @@ ColumnLimit: 100
 AllowShortFunctionsOnASingleLine: Empty
 SortIncludes: true
 BreakBeforeBraces: Allman
+BinPackParameters: false
+BinPackArguments: false
+AlignAfterOpenBracket: AlwaysBreak
+SeparateDefinitionBlocks: Always
+MaxEmptyLinesToKeep: 1
+IncludeBlocks: Regroup
+
+IncludeCategories:
+  - Regex: "^<.*>" # system headers
+    Priority: 1
+  - Regex: '^".*"' # local/project headers
+    Priority: 2

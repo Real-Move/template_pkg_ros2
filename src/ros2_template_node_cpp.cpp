@@ -4,7 +4,7 @@
  * See LICENSE for full terms.
  */
 
-#include "template_pkg_ros2/ros2_template_node.hpp"
+#include <template_pkg_ros2/ros2_template_node.hpp>
 
 RosTemplateNode::RosTemplateNode() {}
 

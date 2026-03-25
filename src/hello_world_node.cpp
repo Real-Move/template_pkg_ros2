@@ -4,10 +4,10 @@
  * See LICENSE for full terms.
  */
 
-#include "template_pkg_ros2/ros2_template_node.hpp"
+#include <template_pkg_ros2/ros2_template_node.hpp>
 
 // Include the ros2 c++ APIs
-#include "rclcpp/rclcpp.hpp"
+#include <rclcpp/rclcpp.hpp>
 
 int main(int argc, char *argv[])
 {

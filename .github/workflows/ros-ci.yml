@@ -17,6 +17,7 @@ on:
       - 'change_name.py'
       - 'commit.sh'
       - 'pyproject.toml'
+      - 'yammlint.yml'
   pull_request:
     branches: [main, devel]
     paths-ignore:
@@ -33,6 +34,7 @@ on:
       - 'change_name.py'
       - 'commit.sh'
       - 'pyproject.toml'
+      - 'yammlint.yml'
   workflow_dispatch:
 
 jobs:
