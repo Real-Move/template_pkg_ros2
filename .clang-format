@@ -1,18 +1,29 @@
 BasedOnStyle: LLVM
 IndentWidth: 4
+ContinuationIndentWidth: 4
+ConstructorInitializerIndentWidth: 4
 ColumnLimit: 100
-AllowShortFunctionsOnASingleLine: Empty
-SortIncludes: true
+
 BreakBeforeBraces: Allman
+
+AllowShortFunctionsOnASingleLine: Empty
+PackConstructorInitializers: CurrentLine
+
 BinPackParameters: false
 BinPackArguments: false
-AlignAfterOpenBracket: AlwaysBreak
+
+BreakConstructorInitializers: AfterColon
+
+PenaltyBreakBeforeFirstCallParameter: 10
+PenaltyBreakAssignment: 10
+
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: "^<.*>"
+    Priority: 1
+  - Regex: '^".*"'
+    Priority: 2
+
 SeparateDefinitionBlocks: Always
 MaxEmptyLinesToKeep: 1
-IncludeBlocks: Regroup
-
-IncludeCategories:
-  - Regex: "^<.*>" # system headers
-    Priority: 1
-  - Regex: '^".*"' # local/project headers
-    Priority: 2

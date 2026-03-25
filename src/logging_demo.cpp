@@ -21,8 +21,8 @@ class LoggingDemo : public rclcpp::Node
             {
                 const bool verbose = this->get_parameter("verbose_debug").as_bool();
 
-                RCLCPP_DEBUG(
-                    this->get_logger(), "This is a DEBUG message (only if log level allows).");
+                RCLCPP_DEBUG(this->get_logger(),
+                             "This is a DEBUG message (only if log level allows).");
                 if (verbose)
                 {
                     RCLCPP_DEBUG(this->get_logger(), "Extra DEBUG because verbose_debug=true.");
