@@ -1,0 +1,7 @@
+name: pre-commit
+
+on: [push, pull_request]
+
+jobs:
+  pre-commit-check:
+    uses: Real-Move/realmove-actions/.github/workflows/reusable-pre-commit.yml@main
