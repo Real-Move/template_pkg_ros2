@@ -6,7 +6,7 @@
   <description>A ROS 2 package template providing a starting point for your ROS 2 nodes and applications.
     Customize this package to suit your specific robotics project needs.</description>
   <maintainer email="luca.fortini@iit.it">Luca Fortini</maintainer>
-  <license>MIT</license>
+  <license>Proprietary</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>
