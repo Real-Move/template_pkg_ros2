@@ -4,14 +4,14 @@
 
 A minimal ROS 2 package template with Docker, VS Code Devcontainer, pre-commit hooks, unit tests, and a ready-to-run launch file.
 
-After creating your repo from this template, rename the package using the script below. This way all the occurences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
+After creating your repo from this template, rename the package using the script below. This way all the occurrences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
 
 ``` bash
 ./change_name.py
 ```
 
 > [!IMPORTANT]
-> This probably works only if you create a repo from this template using github web interface.
+> This probably works only if you create a repo from this template using the GitHub web interface.
 
 ## Docker
 
@@ -45,7 +45,7 @@ colcon test-result --all --verbose
 
 ```
 
-alternatively to run the pytests the following output is cleaner.
+Alternatively, to run the pytests the following output is cleaner.
 
 
 ```
@@ -54,12 +54,12 @@ python3 -m pytest -v
 
 ## Pre-Commit
 
-To use the pre-commits features you need to install `pre-commit` using pip.
+To use the pre-commit features you need to install `pre-commit` using pip.
 ```bash
 pip install pre-commit
 ```
 
-Then browse you package base folder and run the following commands.
+Then browse your package base folder and run the following commands.
 ```bash
 pre-commit install --install-hooks
 pre-commit run --all-files
