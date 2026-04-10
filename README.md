@@ -2,27 +2,27 @@
 
 [![ROS CI Test Build](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci.yml/badge.svg)](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci.yml)
 
-A minimal ROS 2 package template with Docker, VS Code Devcontainer, pre-commit hooks, unit tests, and a ready-to-run launch file.
+A minimal ROS 2 package template with Docker, pre-commit hooks, unit tests, and a ready-to-run launch file.
 
-After creating your repo from this template, rename the package using the script below. This way all the occurences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
+After creating your repo from this template, rename the package using the script below. This way all the occurrences of the `template_pkg_ros2` string will be substituted by the name of your actual package.
 
-``` bash
+```bash
 ./change_name.py
 ```
 
 > [!IMPORTANT]
-> This probably works only if you create a repo from this template using github web interface.
+> This probably works only if you create a repo from this template using the GitHub web interface.
 
 ## Docker
 
 Build the Docker Image
 ```bash
-cd_ws
+# Navigate to your repository root first
 docker build -t <image_name> -f .docker/Dockerfile .
 ```
 
 Run the Container
-```
+```bash
 docker run -it --rm --privileged --name <container_name> --mount type=bind,source=/ros/ros2_ws,target=/ros/ros2_ws -v /dev*:/dev* -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix <image_name> /bin/bash
 ```
 
@@ -42,30 +42,29 @@ ros2 launch template_pkg_ros2 ros2_template.launch.py
 ```bash
 colcon test --packages-select template_pkg_ros2 --ctest-args tests
 colcon test-result --all --verbose
-
 ```
 
-alternatively to run the pytests the following output is cleaner.
+Alternatively, to run the pytest tests the following output is cleaner:
 
-
-```
+```bash
 python3 -m pytest -v
 ```
 
 ## Pre-Commit
 
-To use the pre-commits features you need to install `pre-commit` using pip.
+To use the pre-commit features you need to install `pre-commit` using pip.
 ```bash
 pip install pre-commit
 ```
 
-Then browse you package base folder and run the following commands.
+Then browse your package base folder and run the following commands.
 ```bash
 pre-commit install --install-hooks
 pre-commit run --all-files
 ```
 
-## VS-Code Devcontainer
-I added a devcontainer minimal structure to activate Python and ROS linting in VS code.
+## VS Code Dev Container
+
+A devcontainer configuration is not included in this template. You can add a `.devcontainer/devcontainer.json` to your repository to enable Python and ROS linting in VS Code.
 
 Have fun developing your ROS 2 Package!
