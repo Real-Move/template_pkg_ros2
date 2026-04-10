@@ -8,6 +8,6 @@ import launch
 def generate_launch_description():
 
     ld = launch.LaunchDescription()
-    ld.add_action(launch.actions.LogInfo(msg="Hi from Include!"))
+    ld.add_action(launch.actions.LogInfo(msg="Hi from example include launch!"))
 
     return ld

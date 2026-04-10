@@ -4,10 +4,7 @@
 # Proprietary and confidential.
 # See LICENSE for full terms.
 
-
-def main():
-    print("Hello from template_pkg_ros2 python node.")
-
+from template_pkg_ros2.minimal_py_node import main
 
 if __name__ == "__main__":
     main()

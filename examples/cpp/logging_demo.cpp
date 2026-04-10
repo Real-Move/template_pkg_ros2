@@ -4,7 +4,7 @@
  * See LICENSE for full terms.
  */
 
-// src/logging_demo.cpp
+// examples/cpp/logging_demo.cpp
 #include <rclcpp/rclcpp.hpp>
 
 class LoggingDemo : public rclcpp::Node

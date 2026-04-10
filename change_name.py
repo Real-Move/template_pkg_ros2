@@ -7,6 +7,8 @@
 import os
 import re
 import subprocess
+import sys
+from pathlib import Path
 
 TEMPLATE_NAME = "template_pkg_ros2"
 GITHUB_ORG = "Real-Move"  # change if you use a different org/user
@@ -69,6 +71,31 @@ def replace_string(directory, old_string, new_string):
                 continue  # skip binary/non-utf8 files
 
 
+def get_ci_workflow_metadata(repo_root):
+    """
+    Return the CI workflow filename and display name if a likely CI workflow exists.
+    """
+    workflows_dir = Path(repo_root) / ".github" / "workflows"
+    if not workflows_dir.exists():
+        return None, None
+
+    candidates = sorted(workflows_dir.glob("*.y*ml"))
+    for workflow_path in candidates:
+        try:
+            content = workflow_path.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+
+        if "pull_request:" not in content and "push:" not in content:
+            continue
+
+        name_match = re.search(r"^name:\s*(.+?)\s*$", content, flags=re.MULTILINE)
+        workflow_name = name_match.group(1).strip() if name_match else "CI"
+        return workflow_path.name, workflow_name
+
+    return None, None
+
+
 def update_readme(repo_root, template_name, repo_name, github_org=GITHUB_ORG):
     """
     README.md is at repo root.
@@ -107,9 +134,14 @@ def update_readme(repo_root, template_name, repo_name, github_org=GITHUB_ORG):
         title_line = title_line.replace(template_name, repo_name)
 
     if badge_line is None:
+        workflow_file, workflow_name = get_ci_workflow_metadata(repo_root)
+        if workflow_file is None:
+            workflow_file = "ros-ci.yml"
+        if workflow_name is None:
+            workflow_name = "ROS CI Test Build"
         badge_line = (
-            f"[![Test Build](https://github.com/{github_org}/{repo_name}/actions/workflows/ci.yml/badge.svg)]"
-            f"(https://github.com/{github_org}/{repo_name}/actions/workflows/ci.yml)"
+            f"[![{workflow_name}](https://github.com/{github_org}/{repo_name}/actions/workflows/{workflow_file}/badge.svg)]"
+            f"(https://github.com/{github_org}/{repo_name}/actions/workflows/{workflow_file})"
         )
     else:
         badge_line = badge_line.replace(template_name, repo_name)
@@ -120,12 +152,41 @@ def update_readme(repo_root, template_name, repo_name, github_org=GITHUB_ORG):
         f.write(new_readme)
 
 
+def parse_args(argv):
+    dry_run = "--dry-run" in argv
+    assume_yes = "--yes" in argv
+
+    unsupported = [arg for arg in argv if arg not in {"--dry-run", "--yes"}]
+    if unsupported:
+        raise ValueError(
+            f"Unsupported arguments: {' '.join(unsupported)}. Supported flags: --dry-run, --yes."
+        )
+
+    return dry_run, assume_yes
+
+
 if __name__ == "__main__":
+    dry_run, assume_yes = parse_args(sys.argv[1:])
     repo_root = os.path.dirname(os.path.realpath(__file__))
     repo_name = get_git_repo_name(repo_root)
 
     if repo_name is None:
         raise RuntimeError("Not inside a git repository; cannot determine repo name.")
+
+    print(f"Template package name: {TEMPLATE_NAME}")
+    print(f"Repository name: {repo_name}")
+    if dry_run:
+        print("Dry run selected. No files will be modified.")
+        sys.exit(0)
+
+    if not assume_yes:
+        reply = input(
+            "This will rename files and replace text recursively in this repository, then delete "
+            "change_name.py. Continue? [y/N]: "
+        ).strip()
+        if reply.lower() not in {"y", "yes"}:
+            print("Aborted.")
+            sys.exit(1)
 
     replace_string(repo_root, TEMPLATE_NAME, repo_name)
 

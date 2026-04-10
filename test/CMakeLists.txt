@@ -1,3 +1,10 @@
-ament_add_gtest(test_ros2_template_node test_ros2_template_node.cpp)
+ament_add_gtest(test_minimal_cpp_node test_minimal_cpp_node.cpp)
+target_sources(test_minimal_cpp_node PRIVATE ../src/minimal_cpp_node.cpp)
+target_compile_definitions(test_minimal_cpp_node PRIVATE TEMPLATE_PKG_ROS2_DISABLE_MINIMAL_CPP_NODE_MAIN)
+ament_target_dependencies(test_minimal_cpp_node rclcpp)
 
 ament_add_pytest_test(test_hello_world test_hello_world.py)
+ament_add_pytest_test(
+  test_minimal_py_node
+  test_minimal_py_node.py
+)

@@ -20,13 +20,13 @@ find_package(rclpy REQUIRED)
 include_directories(include)
 
 # Create Cpp executable
-add_executable(ros2_template_node_cpp src/ros2_template_node_cpp.cpp)
-ament_target_dependencies(ros2_template_node_cpp rclcpp)
+add_executable(minimal_cpp_node src/minimal_cpp_node.cpp)
+ament_target_dependencies(minimal_cpp_node rclcpp)
 
-add_executable(logging_demo_node src/logging_demo.cpp)
+add_executable(logging_demo_node examples/cpp/logging_demo.cpp)
 ament_target_dependencies(logging_demo_node rclcpp)
 
-add_executable(hello_world_node src/hello_world_node.cpp)
+add_executable(hello_world_node examples/cpp/hello_world_node.cpp)
 ament_target_dependencies(hello_world_node rclcpp)
 
 # Install Python modules
@@ -45,16 +45,17 @@ endif()
 
 # Install Python executables
 install(PROGRAMS
-  scripts/ros2_template_node_python.py
-  scripts/hello_world_node.py
+  scripts/minimal_py_node.py
+  examples/python/clock_node.py
+  examples/python/hello_world_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
 # Install Cpp executables
 install(TARGETS
-ros2_template_node_cpp
-hello_world_node
-logging_demo_node
+  minimal_cpp_node
+  hello_world_node
+  logging_demo_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

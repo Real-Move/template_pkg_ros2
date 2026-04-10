@@ -5,10 +5,15 @@
  */
 
 #include <gtest/gtest.h>
+#include <template_pkg_ros2/minimal_cpp_node.hpp>
 
-TEST(package_name, a_first_test)
+TEST(test_minimal_cpp_node, add_two_ints_returns_expected_sum)
 {
-    ASSERT_EQ(4, 2 + 2);
+    MinimalNode node;
+    int sum = 0;
+
+    ASSERT_TRUE(node.addTwoInts(2, 2, sum));
+    ASSERT_EQ(4, sum);
 }
 
 int main(int argc, char **argv)
