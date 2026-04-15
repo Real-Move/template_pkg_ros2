@@ -137,7 +137,7 @@ colcon test-result --verbose
 Install `pre-commit`:
 
 ```bash
-pip install pre-commit
+sudo apt install pre-commit
 ```
 
 Enable the hooks and run them across the repository:
