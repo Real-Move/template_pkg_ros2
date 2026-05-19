@@ -1,7 +1,9 @@
 name: Notify Issue Author if No Labels
+
 on:
   issues:
     types: [opened, edited, unlabeled]
+
 permissions:
   issues: write
 jobs:
