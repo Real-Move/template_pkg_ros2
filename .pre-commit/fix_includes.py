@@ -5,22 +5,46 @@
 
 import re
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
-# Define your project prefixes
-LOCAL_PREFIXES = [
-    "realmove_gui_ros2",
-]
+INCLUDE_RE = re.compile(r'#include\s*(?:"([^"]+)"|<([^>]+)>)')
 
-INCLUDE_RE = re.compile(r'#include\s+"([^"]+)"')
+
+def discover_local_prefixes() -> set[str]:
+    """Infer local include prefixes from repository metadata.
+
+    Priority:
+    1. ROS package name from package.xml in repo root.
+    2. Repository folder name as fallback.
+    """
+    prefixes: set[str] = set()
+    repo_root = Path(__file__).resolve().parent.parent
+
+    package_xml = repo_root / "package.xml"
+    if package_xml.exists():
+        try:
+            root = ET.fromstring(package_xml.read_text())
+            name_elem = root.find("name")
+            if name_elem is not None and name_elem.text:
+                prefixes.add(name_elem.text.strip())
+        except ET.ParseError:
+            # Keep hook resilient: fallback to repository name.
+            pass
+
+    prefixes.add(repo_root.name)
+    return {p for p in prefixes if p}
+
+
+LOCAL_PREFIXES = discover_local_prefixes()
 
 
 def fix(text: str) -> str:
     def repl(match):
-        path = match.group(1)
+        path = match.group(1) or match.group(2)
 
         # if it starts with one of your local prefixes → keep ""
-        if any(path.startswith(p) for p in LOCAL_PREFIXES):
+        if any(path == p or path.startswith(f"{p}/") for p in LOCAL_PREFIXES):
             return f'#include "{path}"'
 
         # otherwise → external → use <>
