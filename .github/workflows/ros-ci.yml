@@ -6,9 +6,7 @@ on:
     paths-ignore:
       - '.clang-format'
       - '.docker/**'
-      - '.github/workflows/add-opened-issue-to-project.yml'
-      - '.github/workflows/notify-unlabeled-issue.yml'
-      - '.github/workflows/pre-commit.yml'
+      - '.github/**'
       - '.gitignore'
       - '.codex/**'
       - 'AGENTS.md'
@@ -26,9 +24,7 @@ on:
     paths-ignore:
       - '.clang-format'
       - '.docker/**'
-      - '.github/workflows/add-opened-issue-to-project.yml'
-      - '.github/workflows/notify-unlabeled-issue.yml'
-      - '.github/workflows/pre-commit.yml'
+      - '.github/**'
       - '.gitignore'
       - '.codex/**'
       - 'AGENTS.md'
