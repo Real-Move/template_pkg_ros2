@@ -23,7 +23,7 @@ class MinimalNode
 
     void print(std::string message);
 
-    bool addTwoInts(int a, int b, int &sum);
+    bool addTwoInts(int a, int b, int& sum);
 };
 
 #endif // TEMPLATE_PKG_ROS2__MINIMAL_CPP_NODE_HPP_

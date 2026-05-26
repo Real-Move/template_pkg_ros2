@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, devel]
     paths-ignore:
-      - '.clang-format'
+      - '**/.clang-format'
       - '.docker/**'
       - '.github/**'
       - '.gitignore'
@@ -22,7 +22,7 @@ on:
   pull_request:
     branches: [main, devel]
     paths-ignore:
-      - '.clang-format'
+      - '**/.clang-format'
       - '.docker/**'
       - '.github/**'
       - '.gitignore'

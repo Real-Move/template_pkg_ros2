@@ -5,7 +5,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <template_pkg_ros2/minimal_cpp_node.hpp>
+
+#include "template_pkg_ros2/minimal_cpp_node.hpp"
 
 TEST(test_minimal_cpp_node, add_two_ints_returns_expected_sum)
 {
@@ -16,7 +17,7 @@ TEST(test_minimal_cpp_node, add_two_ints_returns_expected_sum)
     ASSERT_EQ(4, sum);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

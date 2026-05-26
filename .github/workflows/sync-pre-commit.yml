@@ -11,7 +11,7 @@ on:
 
 jobs:
   sync:
-    uses: Real-Move/realmove-actions/.github/workflows/sync-pre-commit.yml@main
+    uses: Real-Move/realmove-actions/.github/workflows/reusable-sync-pre-commit.yml@main
 
     permissions:
       contents: write

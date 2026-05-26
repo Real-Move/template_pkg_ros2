@@ -4,12 +4,12 @@
  * See LICENSE for full terms.
  */
 
-#include <template_pkg_ros2/minimal_cpp_node.hpp>
+#include "template_pkg_ros2/minimal_cpp_node.hpp"
 
 // Include the ros2 c++ APIs
 #include <rclcpp/rclcpp.hpp>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     // Process ros2-related command-line arguments and initialize ros2 for this process
     rclcpp::init(argc, argv);
