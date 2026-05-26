@@ -27,3 +27,5 @@ IncludeCategories:
 
 SeparateDefinitionBlocks: Always
 MaxEmptyLinesToKeep: 1
+
+PointerAlignment: Left
