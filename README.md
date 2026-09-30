@@ -1,6 +1,6 @@
 # template_pkg_ros2
 
-[![ROS CI Test Build](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci.yml/badge.svg)](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci.yml)
+[![ROS CI Test Build](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci-deps.yml/badge.svg)](https://github.com/Real-Move/template_pkg_ros2/actions/workflows/ros-ci-deps.yml)
 
 `template_pkg_ros2` is a minimal ROS 2 package template for starting new nodes and small applications. It includes C++ and Python executables, example launch files, unit tests, Docker support, and pre-commit integration.
 
