@@ -1,0 +1,42 @@
+name: ROS CI Test Build • Core
+
+on:
+  push:
+    branches: [main, devel]
+    paths: &ros_ci_paths
+      - '**'
+      # Documentation and repository metadata.
+      - '!**/*.md'
+      - '!LICENSE'
+      - '!.gitignore'
+      - '!.codex/**'
+      # Formatting and pre-commit tooling (pyproject.toml currently only configures Ruff).
+      - '!.clang-format'
+      - '!.yamllint'
+      - '!pyproject.toml'
+      - '!.pre-commit-config*.yaml'
+      - '!.pre-commit/**'
+      # Developer helpers and Docker files are not used by this ROS build.
+      - '!.docker/**'
+      - '!change_name.py'
+      - '!commit.sh'
+      # Ignore other workflows, but always check changes to this one.
+      - '!.github/workflows/**'
+      - '.github/workflows/ros-ci-deps.yml'
+  pull_request:
+    branches: [main, devel]
+    paths: *ros_ci_paths
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ROS CI Test Build
+    uses: Real-Move/realmove-actions/.github/workflows/reusable-ros-ci.yml@main
+    with:
+      ros_distro: humble
+      workspace_mode: core
+      skip_tests: false
+      skip_rosdep_install: false
+      rosdep_check: false
+    secrets:
+      REPO_ORG_PAT: ${{ secrets.REPO_ORG_PAT }}
