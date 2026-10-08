@@ -1,3 +1,4 @@
+---
 name: ROS CI Test Build • Core
 
 on:
@@ -27,6 +28,10 @@ on:
     branches: [main, devel]
     paths: *ros_ci_paths
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
