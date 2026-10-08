@@ -1,0 +1,384 @@
+name: Codex Documentation Review and Updates
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Run maintenance even when no relevant files changed"
+        type: boolean
+        required: false
+        default: false
+  schedule:
+    - cron: "23 7 * * 0"  # Sundays at 07:23 UTC
+
+concurrency:
+  group: documentation-maintenance
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  detect-updates:
+    # Manual runs must also use the default branch.
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
+      baseline: ${{ steps.previous.outputs.sha }}
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Find last successful run
+        id: previous
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const current = await github.rest.actions.getWorkflowRun({
+              ...context.repo,
+              run_id: context.runId,
+            });
+            const runs = await github.rest.actions.listWorkflowRuns({
+              ...context.repo,
+              workflow_id: current.data.workflow_id,
+              branch: context.payload.repository.default_branch,
+              status: 'success',
+              per_page: 1,
+            });
+            core.setOutput('sha', runs.data.workflow_runs[0]?.head_sha || '');
+
+      - name: Check for relevant updates
+        id: changes
+        env:
+          PREVIOUS_SHA: ${{ steps.previous.outputs.sha }}
+          FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.force }}
+        run: |
+          if [[ "$FORCE_RUN" == "true" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Forced manual run: perform maintenance regardless of updates."
+            exit 0
+          fi
+
+          if [[ -z "$PREVIOUS_SHA" ]] || ! git cat-file -e "$PREVIOUS_SHA^{commit}"; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "First run or missing baseline: perform a full review."
+            exit 0
+          fi
+
+          # Source, configuration, and file moves can all affect documentation.
+          if git diff --quiet "$PREVIOUS_SHA" HEAD --; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No relevant updates: skip Codex."
+          else
+            result=$?
+            if [[ "$result" -ne 1 ]]; then exit "$result"; fi
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  maintenance:
+    needs: detect-updates
+    if: needs.detect-updates.outputs.changed == 'true'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check local tools and authentication
+        run: |
+          codex --version
+          codex login status
+          python3 --version
+
+      - name: Find local link and heading anchor issues
+        continue-on-error: true
+        uses: lycheeverse/lychee-action@v2
+        with:
+          fail: false
+          failIfEmpty: false
+          output: ${{ runner.temp }}/docs-links-before-${{ github.run_id }}.md
+          args: >-
+            --offline
+            --include-fragments
+            '**/*.md'
+            '**/*.markdown'
+
+      - name: Review and expand documentation
+        env:
+          DOCS_BASE_SHA: ${{ needs.detect-updates.outputs.baseline }}
+          DOCS_LINK_REPORT: ${{ runner.temp }}/docs-links-before-${{ github.run_id }}.md
+        run: |
+          # Intermediate tool output must not publish annotations before fixes.
+          workflow_commands_token="$(python3 -c 'import uuid; print(uuid.uuid4())')"
+          echo "::stop-commands::$workflow_commands_token"
+          trap 'echo "::$workflow_commands_token::"' EXIT
+          codex exec \
+            --sandbox workspace-write \
+            --output-last-message "$RUNNER_TEMP/docs-maintenance-$GITHUB_RUN_ID.md" \
+            - <<'PROMPT'
+          Review, update, and expand the repository's documentation based on
+          recent changes and gaps in coverage.
+
+          Read and follow repository instructions when present, including
+          AGENTS.md and applicable nested instructions. Respect excluded paths
+          before searching or reading their contents.
+
+          Discover the repository structure and Markdown documentation (.md and
+          .markdown files) at the root and in nested directories, including hidden
+          directories where permitted. Do not assume a particular folder layout.
+          Follow documentation entry points and relative links to understand how
+          the documentation is organized. Skip generated, vendored, and ignored
+          content. Identify the source of truth for synced documentation and edit
+          the source rather than a generated or synchronized copy.
+          Read permitted source code, configuration, and workflow files as needed
+          to verify instructions. Only create or edit Markdown documentation
+          allowed by the repository's instructions and follow its documentation
+          conventions.
+
+          Use DOCS_BASE_SHA from the environment as the previous successful run's
+          commit when it is available locally. Review permitted changes between
+          that commit and HEAD and the relevant commit history to identify new or
+          changed features, interfaces, setup requirements, and workflows that
+          need documentation. If the baseline is empty or unavailable, review the
+          current repository and recent history for documentation gaps. Respect
+          excluded paths when inspecting history and diffs as well as files.
+
+          Update existing documentation when it provides a suitable home. Add new
+          guides or reference files when a distinct topic or user task deserves
+          its own documentation, including when no documentation exists yet.
+          Choose locations and names from the discovered repository structure
+          and conventions; create directories when useful and permitted. Ground
+          additions in verified repository behavior and concrete reader needs.
+          Update permitted indexes, tables of contents, and related links so new
+          documentation is discoverable. Avoid duplicating existing coverage.
+
+          Read the initial local-link check report at DOCS_LINK_REPORT from the
+          environment, if available. Fix reported broken relative links, image
+          references, and heading anchors in permitted Markdown files using the
+          actual file structure and headings as evidence. Preserve useful links;
+          do not remove them merely to silence the checker or invent targets.
+          Respect excluded paths and do not change checker configuration to hide
+          failures. Report ambiguous, excluded, or otherwise unfixable issues,
+          and report when the initial check could not complete.
+
+          Check terminology, formatting, heading hierarchy, summaries,
+          tables of contents, relative links, heading anchors, image references,
+          prerequisites, examples, expected results, and contradictory guidance.
+          Identify potentially outdated instructions using available evidence.
+          Suggest meaningful visuals in your report when helpful; do not create
+          image assets during this run.
+
+          Make small, evidence-backed improvements. Preserve technical meaning
+          unless verified evidence supports a correction. Do not rewrite accurate
+          content merely to vary wording or assume content is outdated due to age.
+          Do not invent commands, configuration options, or expected results.
+          Report unverifiable findings instead of guessing. Respect excluded paths.
+          Leave the repository unchanged when no useful additions or corrections
+          are needed.
+
+          Leave edits uncommitted. Do not create branches, commit, push, or
+          open PRs; the workflow handles these operations.
+          Do not change configuration, workflows, agent instruction files, or
+          generated files.
+
+          Run applicable validation checks available locally. The workflow also
+          runs Markdown and local-link checks after this task.
+          Use command-line tools for local checks, not GitHub Action entrypoints.
+          The workflow publishes final validation results after formatting fixes.
+
+          Return a Markdown report suitable as a pull request description:
+          - Changes made and why they help.
+          - New documentation added and the changes or coverage gaps motivating it.
+          - Evidence supporting technical corrections.
+          - Validation performed and its results.
+          - Unresolved findings and checks that could not be completed.
+          PROMPT
+
+      - name: Find Markdown files to format
+        id: markdown_files
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+          import uuid
+
+          changed = set(subprocess.check_output([
+              "git", "diff", "HEAD", "--name-only", "--no-renames", "-z",
+          ]).split(b"\0"))
+          changed.update(subprocess.check_output([
+              "git", "ls-files", "--others", "--exclude-standard", "-z",
+          ]).split(b"\0"))
+          globs = []
+          files = []
+          for raw in sorted(changed - {b""}):
+              path = Path(os.fsdecode(raw))
+              if (path.suffix not in (".md", ".markdown")
+                      or path.name in ("AGENTS.md", "AGENTS.override.md")
+                      or path.is_symlink() or not path.is_file()):
+                  continue
+              if "\n" in str(path) or "\r" in str(path):
+                  raise SystemExit("Cannot format a filename containing a newline.")
+              globs.append("./" + re.sub(r"([\\*?\[\]{}()!+@|])", r"\\\1", str(path)))
+              files.append(str(path.resolve()))
+          manifest = Path(os.environ["RUNNER_TEMP"]) / "docs-format-files.json"
+          manifest.write_text(json.dumps(files))
+          delimiter = uuid.uuid4().hex
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"globs<<{delimiter}\n" + "\n".join(globs) + f"\n{delimiter}\n")
+          PY
+
+      - name: Set up Node.js for Markdown wrapping
+        if: steps.markdown_files.outputs.globs != ''
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Wrap long Markdown prose
+        if: steps.markdown_files.outputs.globs != ''
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          import subprocess
+
+          manifest = Path(os.environ["RUNNER_TEMP"]) / "docs-format-files.json"
+          for path in json.loads(manifest.read_text()):
+              subprocess.run([
+                  "npx", "--yes", "prettier@3.6.2",
+                  "--parser", "markdown", "--prose-wrap", "always",
+                  "--print-width", "120", "--embedded-language-formatting", "off",
+                  "--write", "--", path,
+              ], check=True)
+          PY
+
+      - name: Configure Markdown formatting
+        if: steps.markdown_files.outputs.globs != ''
+        run: |
+          cat > "$RUNNER_TEMP/docs-maintenance.markdownlint.json" <<'JSON'
+          {
+            "MD013": {
+              "line_length": 120,
+              "heading_line_length": 120,
+              "code_blocks": false,
+              "tables": false
+            }
+          }
+          JSON
+
+      - name: Fix Markdown formatting
+        if: steps.markdown_files.outputs.globs != ''
+        uses: DavidAnson/markdownlint-cli2-action@v24
+        continue-on-error: true
+        with:
+          config: ${{ runner.temp }}/docs-maintenance.markdownlint.json
+          fix: true
+          globs: ${{ steps.markdown_files.outputs.globs }}
+
+      - name: Recheck local links and heading anchors
+        id: links_after
+        continue-on-error: true
+        uses: lycheeverse/lychee-action@v2
+        with:
+          fail: false
+          failIfEmpty: false
+          output: ${{ runner.temp }}/docs-links-${{ github.run_id }}.md
+          args: >-
+            --offline
+            --include-fragments
+            '**/*.md'
+            '**/*.markdown'
+
+      - name: Add link validation results to the maintenance report
+        env:
+          LINK_CHECK_EXIT_CODE: ${{ steps.links_after.outputs.exit_code }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          temp = Path(os.environ["RUNNER_TEMP"])
+          run_id = os.environ["GITHUB_RUN_ID"]
+          report = temp / f"docs-maintenance-{run_id}.md"
+          links = temp / f"docs-links-{run_id}.md"
+          code = os.environ.get("LINK_CHECK_EXIT_CODE", "")
+          if code == "0":
+              status = "Local link and heading anchor checks passed."
+          elif code:
+              status = (
+                  f"Link validation returned exit code {code}; "
+                  "unresolved findings remain for review."
+              )
+          else:
+              status = "Link validation could not complete; review the workflow logs."
+          with report.open("a") as output:
+              output.write("\n\n## Link validation after updates\n\n" + status + "\n")
+              if links.is_file():
+                  output.write("\n" + links.read_text() + "\n")
+          PY
+
+      - name: Reject commits and changes outside the allowed scope
+        run: |
+          python3 - <<'PY'
+          import os
+          import subprocess
+
+          def git(*args):
+              return subprocess.check_output(["git", *args])
+
+          if git("rev-parse", "HEAD").decode().strip() != os.environ["GITHUB_SHA"]:
+              raise SystemExit("Codex must leave changes uncommitted.")
+
+          changed = set(git("diff", "HEAD", "--name-only", "--no-renames", "-z").split(b"\0"))
+          changed.update(git("ls-files", "--others", "--exclude-standard", "-z").split(b"\0"))
+          changed.discard(b"")
+          invalid = [os.fsdecode(p) for p in changed if not (
+              p.endswith((b".md", b".markdown"))
+              and os.path.basename(p) not in (b"AGENTS.md", b"AGENTS.override.md")
+          )]
+          if invalid:
+              raise SystemExit("Changes outside the allowed scope: " + repr(invalid))
+          PY
+
+      - name: Create or update maintenance PR
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: automation/docs-maintenance
+          commit-message: "docs: update and expand documentation"
+          title: "docs: update and expand documentation"
+          reviewers: 4TINI
+          labels: documentation
+          body-path: ${{ runner.temp }}/docs-maintenance-${{ github.run_id }}.md
+          draft: true
+          # The scope guard above validates all changes before staging.
+
+      - name: Save maintenance report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: docs-maintenance-report
+          path: ${{ runner.temp }}/docs-maintenance-${{ github.run_id }}.md
+          if-no-files-found: ignore
