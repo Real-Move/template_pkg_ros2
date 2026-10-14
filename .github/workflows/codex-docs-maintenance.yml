@@ -138,7 +138,8 @@ jobs:
           recent changes and gaps in coverage.
 
           Read and follow repository instructions when present, including
-          AGENTS.md and applicable nested instructions. Respect excluded paths
+          AGENTS.md, applicable nested instructions, and
+          .github/agent-guidelines/markdown.md. Respect excluded paths
           before searching or reading their contents.
 
           Discover the repository structure and Markdown documentation (.md and
