@@ -23,6 +23,7 @@ on:
       - '!commit.sh'
       # Ignore other workflows, but always check changes to this one.
       - '!.github/workflows/**'
+      - '!.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/ros-ci-deps.yml'
   pull_request:
     branches: [main, devel]
